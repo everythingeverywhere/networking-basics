@@ -48,7 +48,4 @@ sudo ip link set bread-pb-veth master brd1
 sudo ip link set bread-j-veth master brd1
 # To verify
 bridge link show brd1
-# Try pinging  pb’s ip 192.168.0.56 from the jelly namespace
-sudo ip netns exec jelly ping 192.168.0.56
-# If you check the routes on your machine the bridge is now visible to the host
-ip route
+
