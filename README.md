@@ -10,7 +10,7 @@ sh create-vm.sh
 
 git clone https://github.com/everythingeverywhere/networking-basics.git && cd networking-basics
 
-# Create the all from blog
+# Create the namespaces, veth's, and bridge from blog
 sh create-net.sh
 ---
 ## Ready for the results
