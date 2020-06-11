@@ -8,7 +8,7 @@ ip netns list
 # To create both veth pair use the command:
 sudo ip link add veth-pb type veth peer name bread-pb-veth
 sudo ip link add veth-jelly type veth peer name bread-j-veth
-# Taking a look at the devices you will see the pair veth-bread1 and veth-bread2 on the host network.
+# Taking a look at the devices you will see your veth pairs on the host network.
 ip link list
 #Now, that we have a veth pair in the host namespace, lets move the cable out into the jelly and pb namespace.
 sudo ip link set veth-pb netns pb
@@ -48,4 +48,18 @@ sudo ip link set bread-pb-veth master brd1
 sudo ip link set bread-j-veth master brd1
 # To verify
 bridge link show brd1
+# Set the address of the bridge device bread so we can access the namespaces directly from the host namespace.
+sudo ip addr add 192.168.0.60/24 brd + dev brd1
+#First add a default gateway to the bridge
+sudo ip -all netns exec \
+        ip route add default via 192.168.0.60
+# Lets add a new an iptables rule in the POSTROUTING chain of the nat table to receive packets.
+  sudo iptables \
+                -t nat \
+                -A POSTROUTING \
+                -s 192.168.0.60/24 \
+                -j MASQUERADE 
+
+# To enable packet fowarding with ipv4 ip forwarding
+sudo sysctl -w net.ipv4.ip_forward=1
 
